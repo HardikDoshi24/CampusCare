@@ -10,71 +10,61 @@ import About from "./components/about/About";
 import Home from "./components/home/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ManageEntities from "./components/admin/ManageEntities"; // Import the ManageEntities component
 import UserProfile from './components/auth/UserProfile';
 import Footer from './components/common/Footer';
-import AdminHistory from './components/admin/AdminHistory'; // Import AdminHistory component
-
+import AdminEntities from './components/admin/AdminEntities';
 
 function App() {
-  const [userAuthenticated, setUserAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // State to track admin status
-
   const [submittedReports, setSubmittedReports] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState({ name: "", email: "" });
+  const [userData, setUserData] = useState({ name: "", email: "", isAdmin: false  });
 
   const handleSubmit = (formData) => {
     setSubmittedReports([...submittedReports, formData]);
   };
-  const handleLogin = (namelogin, emaillogin) => {
+  const handleLogin = (name, email) => {
+    const isAdmin = email === "admincampuscare@gmail.com";
     setIsLoggedIn(true);
-    setUserData({ namelogin, emaillogin });
+    setUserData({ name, email, isAdmin });
+    console.log("Logged in as admin:", isAdmin);
+    console.log("isLoggedIn:", isLoggedIn);
+    console.log("isAdmin:", userData.isAdmin);
   };
 
+
   return (
-    <Router>
-      <div>
-        <Navbar isAdmin={isAdmin} isLoggedIn={isLoggedIn} handleLogin={handleLogin} user={userData}/>
-        <Routes>
-          <Route path="/login" element={<Login handleLogin={handleLogin} setUserAuthenticated={setUserAuthenticated} />} />
-          <Route path="/register" element={<Register setUserAuthenticated={setUserAuthenticated} />} />
-          
-          <Route path="/" element={<Home/>} />
 
-          <Route path="/report" element={<Report/>} />
-          
-          <Route path="/form/:entity" element={<Form onSubmit={handleSubmit} />} />
-          <Route path="/history" element={<History reports={submittedReports} />} />
+      <Router>
+        <div>
+          <Navbar isLoggedIn={isLoggedIn} handleLogin={handleLogin} user={userData}/>
+          <Routes>
+            <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+            <Route path="/register" element={<Register />} />
 
-          <Route path="/about" element={<About/>} />
+            <Route path="/" element={<Home/>} />
 
+            {/*{isLoggedIn && userData.isAdmin && (*/}
+                <Route path="/admin" element={<AdminEntities />} />
+            {/*)}*/}
 
-          <Route path="/manage-entities" element={<ManageEntities/>} />
-          <Route path="/admin-history" element={<AdminHistory />} />
+            {isLoggedIn && !userData.isAdmin && (
+                <>
+                  <Route path="/report" element={<Report/>} />
+                  <Route path="/form/:entity" element={<Form onSubmit={handleSubmit} />} />
+                  <Route path="/history" element={<History reports={submittedReports} />} />
+                </>
+            )}
 
+            <Route path="/about" element={<About/>} />
+            <Route path="/userprofile" element={<UserProfile user={userData}/>} />
 
-          <Route path="/userprofile" element={<UserProfile user={userData}/>} />
-
-          {/* Protected routes */}
-          {/* <Route
-            path="/report"
-            element={userAuthenticated ? <Report /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/history"
-            element={userAuthenticated ? <Report /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/form"
-            element={userAuthenticated ? <Form /> : <Navigate to="/login" />}
-          /> */}
-        </Routes>
-        <ToastContainer />
-
-      </div>
-      <Footer/>
-    </Router>
+            {/* Redirect to home if not logged in */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+          <ToastContainer />
+        </div>
+        <Footer/>
+      </Router>
   );
 }
 

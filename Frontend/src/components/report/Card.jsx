@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-function Card({ image, name, isSelected, onClick }) {
+function Card({ image, name, description ,isSelected, onClick }) {
   return (
     <Link to={`/form/${name}`}>
       <div
@@ -17,8 +17,7 @@ function Card({ image, name, isSelected, onClick }) {
               {name}
             </h5>
           <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            Description of the damage or any other relevant information can go
-            here.
+              {description}
           </p>
         </div>
       </div>

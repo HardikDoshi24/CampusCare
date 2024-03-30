@@ -2,6 +2,7 @@ package org.example.restcontroller;
 
 import org.example.entity.User;
 import org.example.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,7 +17,6 @@ public class UserController {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-
     public UserController(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -28,6 +28,11 @@ public class UserController {
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
 
+        // Check if the registered user is admin
+        if (user.getEmail().equals("admincampuscare@gmail.com")) {
+            user.setAdmin(true);
+        }
+
         // Save the new User to the database
         userRepository.save(user);
 
@@ -36,14 +41,18 @@ public class UserController {
 
         return allUsers;
     }
+
     @GetMapping("/login")
     public ResponseEntity<String> loginUser(@RequestParam String email, @RequestParam String password) {
         // Find the user by email
-        System.out.println(email);
         User user = userRepository.findByEmail(email);
         if (user != null) {
             // Check if the password matches
             if (passwordEncoder.matches(password, user.getPassword())) {
+                // Check if the user is an admin
+                if (user.getEmail().equals("admincampuscare@gmail.com")) {
+                    user.setAdmin(true);
+                }
                 String userInfo = user.getUsername() + ", " + user.getEmail();
                 return ResponseEntity.ok(userInfo);
             } else {
@@ -53,4 +62,5 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         }
     }
+
 }

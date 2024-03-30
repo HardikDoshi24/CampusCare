@@ -16,6 +16,15 @@ public class User {
     private String username;
     private String email;
     private String password;
+    private boolean isAdmin; // Add field for admin status
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     public Set<Report> getReports() {
         return reports;
@@ -64,11 +73,12 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String username, String email, String password) {
+    public User(int id, String username, String email, String password, boolean isAdmin, Set<Report> reports) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.isAdmin = isAdmin;
+        this.reports = reports;
     }
-
 }

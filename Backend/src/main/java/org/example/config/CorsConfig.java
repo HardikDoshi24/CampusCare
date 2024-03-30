@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
 
-
 @Configuration
 @EnableWebMvc
 public class CorsConfig {
@@ -36,6 +35,12 @@ public class CorsConfig {
                 HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name()));
         config.setMaxAge(MAX_AGE);
+        // Add the admin entity endpoint to CORS configuration
+        config.addAllowedMethod(HttpMethod.OPTIONS);
+        config.addAllowedMethod(HttpMethod.HEAD);
+        config.addAllowedMethod(HttpMethod.PATCH);
+        config.addAllowedMethod(HttpMethod.TRACE);
+        source.registerCorsConfiguration("/api/admin-entities/**", config);
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(CORS_FILTER_ORDER);
