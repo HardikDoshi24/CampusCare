@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-function Login({handleLogin}) {
+function Login({handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -16,13 +16,15 @@ function Login({handleLogin}) {
       return;
     }
     try {
-      const response = await axios.get("http://localhost:8888/api/login", { params: { email, password } });
+      const response = await axios.post("http://localhost:8888/api/login", { email, password });
       if (response.data) {
         console.log(response.data);
         const userData = response.data;
+        const [name, email] = userData.split(', '); // Split the string to get name and email
+        console.log(email);
         // Check if the logged-in user is admin based on their email
         const isAdmin = userData.email === "admincampuscare@gmail.com";
-        handleLogin(userData.name, userData.email, isAdmin);  // Pass user information to handleLogin
+        handleLogin(name, email, isAdmin);  // Pass user information to handleLogin
         toast.success("Login successful.");
       } else {
         toast.error("Invalid email or password.");
