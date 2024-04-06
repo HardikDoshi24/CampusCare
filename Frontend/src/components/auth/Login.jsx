@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-function Login({ handleLogin }) {
+function Login({handleLogin}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +18,7 @@ function Login({ handleLogin }) {
     try {
       const response = await axios.get("http://localhost:8888/api/login", { params: { email, password } });
       if (response.data) {
+        console.log(response.data);
         const userData = response.data;
         // Check if the logged-in user is admin based on their email
         const isAdmin = userData.email === "admincampuscare@gmail.com";

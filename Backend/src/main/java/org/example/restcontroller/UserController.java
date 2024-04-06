@@ -47,12 +47,12 @@ public class UserController {
         // Find the user by email
         User user = userRepository.findByEmail(email);
         if (user != null) {
+            if (user.getEmail().equals("admincampuscare@gmail.com")) {
+                user.setAdmin(true);
+            }
             // Check if the password matches
             if (passwordEncoder.matches(password, user.getPassword())) {
                 // Check if the user is an admin
-                if (user.getEmail().equals("admincampuscare@gmail.com")) {
-                    user.setAdmin(true);
-                }
                 String userInfo = user.getUsername() + ", " + user.getEmail();
                 return ResponseEntity.ok(userInfo);
             } else {

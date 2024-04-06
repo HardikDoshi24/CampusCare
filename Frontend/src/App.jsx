@@ -23,14 +23,14 @@ function App() {
     setSubmittedReports([...submittedReports, formData]);
   };
   const handleLogin = (name, email) => {
+    console.log("Name:", name); // Log the email value to verify
+
+    console.log("Email:", email); // Log the email value to verify
     const isAdmin = email === "admincampuscare@gmail.com";
     setIsLoggedIn(true);
     setUserData({ name, email, isAdmin });
     console.log("Logged in as admin:", isAdmin);
-    console.log("isLoggedIn:", isLoggedIn);
-    console.log("isAdmin:", userData.isAdmin);
   };
-
 
   return (
 
@@ -44,7 +44,7 @@ function App() {
             <Route path="/" element={<Home/>} />
 
             {/*{isLoggedIn && userData.isAdmin && (*/}
-                <Route path="/admin" element={<AdminEntities />} />
+            <Route path="/manage-entities" element={<AdminEntities />} />
             {/*)}*/}
 
             {isLoggedIn && !userData.isAdmin && (
