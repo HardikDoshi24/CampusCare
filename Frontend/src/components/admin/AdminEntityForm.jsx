@@ -1,23 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function AdminEntityForm({ onCreate }) {
+function AdminEntityForm({ onCreateOrUpdate, editingEntity }) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [type, setType] = useState('Lab'); // Default type set to Lab
     const [imageUrl, setImageUrl] = useState('');
 
+    useEffect(() => {
+        if (editingEntity) {
+            setName(editingEntity.name);
+            setDescription(editingEntity.description);
+            setType(editingEntity.type);
+            setImageUrl(editingEntity.imageUrl);
+        } else {
+            // Reset form if not editing
+            resetForm();
+        }
+    }, [editingEntity]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        onCreate({ name, description, type, imageUrl });
+        onCreateOrUpdate({ name, description, type, imageUrl, id: editingEntity?.id });
+        resetForm();
         setName('');
         setDescription('');
         setType('Lab'); // Reset type to Lab after submission
         setImageUrl('');
     };
+    const resetForm = () => {
+        setName('');
+        setDescription('');
+        setType('Lab');
+        setImageUrl('');
+    };
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Add New Entity</h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">{editingEntity ? 'Edit Entity' : 'Add New Entity'}</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -72,7 +91,8 @@ function AdminEntityForm({ onCreate }) {
                     type="submit"
                     className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Save
+                    {editingEntity ? 'Update' : 'Save'}
+
                 </button>
             </form>
         </div>

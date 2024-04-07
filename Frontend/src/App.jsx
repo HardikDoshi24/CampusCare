@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 import UserProfile from './components/auth/UserProfile';
 import Footer from './components/common/Footer';
 import AdminEntities from './components/admin/AdminEntities';
-
 function App() {
   const [submittedReports, setSubmittedReports] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);

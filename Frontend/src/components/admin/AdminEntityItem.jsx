@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
-function AdminEntityItem({ entity, onDelete }) {
+function AdminEntityItem({ entity, onDelete, onEdit }) {
+    const handleEditClick = () => {
+        onEdit(entity); // Call the onEdit function with the entity as parameter
+    };
     return (
         <div className="bg-white p-6 rounded-lg shadow-md mb-4">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">{entity.name}</h3>
@@ -14,12 +16,12 @@ function AdminEntityItem({ entity, onDelete }) {
                 >
                     Delete
                 </button>
-                <Link
-                    to={`/admin/edit/${entity.id}`} // Assuming the URL pattern for the edit form is '/admin/edit/:id'
+                <button
+                    onClick={handleEditClick}
                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                     Edit
-                </Link>
+                </button>
             </div>
         </div>
     );
