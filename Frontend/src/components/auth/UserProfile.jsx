@@ -2,18 +2,19 @@ import React, { useState } from "react";
 
 import { Link } from 'react-router-dom';
 
-function UserProfile({user}) {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+function UserProfile({user, handleLogout}) {
+    // const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
     const toggleDropdown = () => {
       setIsDropdownOpen(!isDropdownOpen);
     };
-  
-    const handleLogin = () => {
-      // Your login logic here
-      // Set isLoggedIn to true after successful login
-      setIsLoggedIn(true);
+
+    const handleSignOut = () => {
+        // Call the handleLogout function passed from the parent component
+        handleLogout();
+        // Close the dropdown after signing out
+        setIsDropdownOpen(false);
     };
     return (
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
@@ -37,9 +38,9 @@ function UserProfile({user}) {
           id="user-dropdown"
         >
           <div className="px-4 py-3">
-            <span className="block text-sm text-gray-900 dark:text-white">{user.namelogin}</span>
+            <span className="block text-sm text-gray-900 dark:text-white">{user.name}</span>
             <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-              {user.emaillogin}
+              {user.email}
             </span>
           </div>
           <ul className="py-2">
@@ -52,26 +53,18 @@ function UserProfile({user}) {
               </Link>
             </li>
             <li>
-              <Link
-                to="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >
-                Sign out
-              </Link>
+                <button
+                    type="button"
+                    onClick={handleSignOut}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                    Sign out
+                </button>
             </li>
           </ul>
         </div>
       )}
-      <button
-        data-collapse-toggle="navbar-user"
-        type="button"
-        className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-        aria-controls="navbar-user"
-        aria-expanded={isDropdownOpen ? 'true' : 'false'}
-        onClick={toggleDropdown}
-      >
-        <span className="sr-only">Open main menu</span>
-      </button>
+
     </div>
     );
     

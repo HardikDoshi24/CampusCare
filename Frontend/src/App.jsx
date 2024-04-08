@@ -29,12 +29,16 @@ function App() {
     setUserData({ name, email, isAdmin });
     // console.log("Logged in as admin:", isAdmin);
   };
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserData({ name: "", email: "", isAdmin: false });
+  };
 
   return (
 
       <Router>
         <div>
-          <Navbar isLoggedIn={isLoggedIn} handleLogin={handleLogin} user={userData}/>
+          <Navbar isLoggedIn={isLoggedIn} handleLogin={handleLogin} handleLogout={handleLogout} user={userData}/>
           <Routes>
             <Route path="/login" element={<Login handleLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
