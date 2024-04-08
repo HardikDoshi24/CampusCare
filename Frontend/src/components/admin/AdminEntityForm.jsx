@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 function AdminEntityForm({ onCreateOrUpdate, editingEntity }) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [type, setType] = useState('Lab'); // Default type set to Lab
+    const [type, setType] = useState('');
     const [imageUrl, setImageUrl] = useState('');
 
     useEffect(() => {
@@ -72,7 +72,7 @@ function AdminEntityForm({ onCreateOrUpdate, editingEntity }) {
                         className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
                         <option value="Lab">Lab</option>
-                        <option value="ClassRoom">ClassRoom</option>
+                        <option value="Classroom">Classroom</option>
                     </select>
                 </div>
                 <div className="mb-4">

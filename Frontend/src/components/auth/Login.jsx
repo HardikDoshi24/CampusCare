@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, Route, useNavigate} from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -8,6 +8,7 @@ function Login({handleLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Import useNavigate hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,11 +22,12 @@ function Login({handleLogin }) {
         console.log(response.data);
         const userData = response.data;
         const [name, email] = userData.split(', '); // Split the string to get name and email
-        console.log(email);
-        // Check if the logged-in user is admin based on their email
-        const isAdmin = userData.email === "admincampuscare@gmail.com";
+        // console.log(email);
+        const isAdmin = email === "admincampuscare@gmail.com";
         handleLogin(name, email, isAdmin);  // Pass user information to handleLogin
+        // console.log(isAdmin);
         toast.success("Login successful.");
+        isAdmin ? navigate("/manage-entities") : navigate("/report");
       } else {
         toast.error("Invalid email or password.");
       }
